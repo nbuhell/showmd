@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>左右分布布局</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+            /* 最小高度为视窗高度，避免空白 */
+        }
+
+        .menu {
+            width: 20%;
+            /* 左侧菜单占20%宽度 */
+            background-color: #f4f4f4;
+            padding-left: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            /* 添加阴影效果 */
+            position: sticky;
+            top: 0;
+            /* 使菜单在滚动时保持固定 */
+            height: 100vh;
+            /* 保持左侧菜单的高度为整个视窗高度 */
+        }
+
+
+        .content {
+            flex-grow: 1;
+            /* 右侧内容区域占剩余空间 */
+            padding-left: 20px;
+            background-color: #fff;
+        }
+
+        /* 一些简单的样式 */
+        .menu ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .menu ul li {
+            margin: 10px 0;
+        }
+
+        .menu ul li a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .menu ul li a:hover {
+            color: #007BFF;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="menu">
+            <h2>菜单</h2>
+            <ul>
+                <li><a href="#" class="menulink" data-md="Best-websites-a-programmer-should-visit-zh.md">程序员适合访问的站点</a>
+                </li>
+                <li><a href="#" class="menulink" data-md="README.md">README</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <div id="mdcontent"></div>
+        </div>
+    </div>
+
+    <script>
+
+        document.addEventListener("click", (doc) => {
+            debugger
+            //console.log(doc)
+            let el = doc.target
+            if (el.tagName == 'A' && el.classList.contains('menulink')) {
+                select(el)
+            }
+        })
+
+        function select(target) {
+            //console.log(target)
+            show(`./${target.dataset["md"]}`)
+        }
+        function show(md) {
+            fetch(md).then(o => {
+                return o.text()
+            }).then(test => {
+                document.querySelector('#mdcontent').innerHTML =
+                    marked.parse(test);
+            })
+        }
+        show("./README.md")
+    </script>
+</body>
+
+</html>
